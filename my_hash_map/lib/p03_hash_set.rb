@@ -9,12 +9,26 @@ class HashSet
   end
 
   def insert(key)
+    hash = key.hash
+    unless include?(key)
+    @store[hash % num_buckets] << key
+    @count += 1
+    resize! if @count == num_buckets
+    end
   end
 
   def include?(key)
+    hash = key.hash
+
+    @store[hash % num_buckets].any? { |el| el == key }
   end
 
   def remove(key)
+    hash = key.hash
+    if include?(key)
+    @count -= 1
+    @store[hash % num_buckets].delete(key)
+    end
   end
 
   private
